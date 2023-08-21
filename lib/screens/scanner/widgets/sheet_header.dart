@@ -42,7 +42,7 @@ class SheetHeader extends StatelessWidget {
               ),
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: AssetImage('assets/images/profil.jpg'),
+                image: AssetImage('assets/images/black-woman.png'),
                 fit: BoxFit.cover,
               ),
             ),

@@ -38,7 +38,7 @@ class SideBarHeader extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Image.asset(
-                'assets/images/profil.jpg',
+                'assets/images/black-woman.png',
                 fit: BoxFit.cover,
               ),
             ),

@@ -30,7 +30,8 @@ class ScanHistoryCard extends StatelessWidget {
             QrCodeDetailsScreen.routeName,
             arguments: qrCodeModel,
           ),
-          leading: ProfilPictureContaire(asset: 'assets/images/profil.jpg'),
+          leading:
+              ProfilPictureContaire(asset: 'assets/images/black-woman.png'),
           title: AppText.medium(
             '${user.nom} ${user.prenoms}',
             textOverflow: TextOverflow.fade,

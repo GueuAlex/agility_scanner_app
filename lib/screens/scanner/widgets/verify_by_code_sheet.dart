@@ -41,6 +41,7 @@ class _VerifyByCodeSheetState extends State<VerifyByCodeSheet> {
         'AG-${DateFormat('yy', 'fr_FR').format(DateTime.now())}-';
     final Widget codeTextField = TextField(
       controller: codeController,
+      keyboardType: TextInputType.number,
       style: const TextStyle(
         color: Colors.black,
         fontSize: 14,
