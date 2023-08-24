@@ -85,7 +85,9 @@ class User {
         number: json["number"] == null ? '' : json["number"],
         entrepotVisite:
             json["entrepot_visite"] == null ? '' : json["entrepot_visite"],
-        motifVisite: json["motif_visite"] == null ? '' : json["motif_visite"],
+        motifVisite: json["motif"] == null || json["motif"]["libelle"] == null
+            ? ''
+            : json["motif"]["libelle"].toLowerCase(),
         members: List<Member>.from(
             json["membre_visites"].map((x) => Member.fromJson(x))),
       );
@@ -105,7 +107,7 @@ class User {
       };
 
   static List<User> userList = [
-    User(
+    /* User(
       id: 1,
       genre: "M",
       nom: "Doe",
@@ -235,6 +237,6 @@ class User {
       number: "345678901",
       entrepotVisite: "Entrepôt J",
       motifVisite: "Présentation",
-    ),
+    ), */
   ];
 }

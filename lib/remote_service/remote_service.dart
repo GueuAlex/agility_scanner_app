@@ -24,8 +24,8 @@ class RemoteService {
   Future<List<QrCodeModel>> getQrcodes() async {
     var uri = Uri.parse(baseUri + 'qrcodes');
     var response = await client.get(uri);
-    //print('my user Dans remote /////////////////////////// : ${response.body}');
-    //print('Dans remote////////////////////////////// : ${response.statusCode}');
+    print('my user Dans remote /////////////////////////// : ${response.body}');
+    print('Dans remote////////////////////////////// : ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       var json = response.body;
       //print(response.body);

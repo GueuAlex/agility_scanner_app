@@ -71,7 +71,7 @@ class QrCodeModel {
       };
 
   static List<QrCodeModel> qrCodeList = [
-    QrCodeModel(
+    /* QrCodeModel(
       id: 1,
       isActive: true,
       type: "temporaire",
@@ -178,6 +178,6 @@ class QrCodeModel {
       codeAssociate: "AG-XF-2023-009",
       isAlreadyScanned: true,
       user: User.userList[9],
-    ),
+    ), */
   ];
 }
