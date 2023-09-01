@@ -2,18 +2,22 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:scanner/config/functions.dart';
-import 'package:scanner/screens/scanner/widgets/verify_by_code_sheet.dart';
+import 'package:get/get.dart';
 
+import 'bloc/internet_bloc/internet_bloc.dart';
+import 'config/functions.dart';
+import 'dependency_injection.dart';
 import 'screens/auth/login/login.dart';
 import 'screens/home/home.dart';
 import 'screens/qr_code_details/qr_code_details_screen.dart';
 import 'screens/scanner/scan_screen.dart';
+import 'screens/scanner/widgets/verify_by_code_sheet.dart';
 import 'screens/search_by_date/search_by_date_screen.dart';
 import 'screens/splash/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -23,7 +27,13 @@ void main() {
     Functions.getScanHistoriesFromApi();
   });
 
-  runApp(const MyApp());
+  runApp(
+    BlocProvider(
+      create: (context) => InternetBloc(),
+      child: const MyApp(),
+    ),
+  );
+  DependencyInjection.init();
 }
 
 class MyApp extends StatelessWidget {
@@ -32,7 +42,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalCupertinoLocalizations.delegate,

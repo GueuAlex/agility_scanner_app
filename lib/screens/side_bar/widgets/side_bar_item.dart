@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:scanner/config/palette.dart';
+
+import '../../../config/palette.dart';
 
 class SideBarItem extends StatelessWidget {
   const SideBarItem({

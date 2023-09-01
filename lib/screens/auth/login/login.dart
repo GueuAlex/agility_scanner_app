@@ -1,11 +1,11 @@
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
-import 'package:scanner/screens/scanner/widgets/infos_column.dart';
 
 import '../../../config/app_text.dart';
 import '../../../config/palette.dart';
 import '../../../widgets/custom_button.dart';
 import '../../home/home.dart';
+import '../../scanner/widgets/infos_column.dart';
 
 class LoginScreen extends StatefulWidget {
   static String routeName = '/loginScreen';

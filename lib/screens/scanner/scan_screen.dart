@@ -1,5 +1,3 @@
-import 'package:scanner/config/palette.dart';
-import 'package:scanner/widgets/custom_button.dart';
 import 'package:vibration/vibration.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
@@ -9,8 +7,10 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../config/app_text.dart';
 import '../../config/functions.dart';
 import '../../config/overlay.dart';
+import '../../config/palette.dart';
 import '../../widgets/action_button.dart';
 import '../../widgets/copy_rigtht.dart';
+import '../../widgets/custom_button.dart';
 import '../side_bar/custom_side_bar.dart';
 import '../side_bar/open_side_dar.dart';
 import 'widgets/error_sheet_container.dart';

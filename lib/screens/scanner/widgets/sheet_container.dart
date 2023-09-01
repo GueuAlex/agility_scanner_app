@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-import 'package:scanner/model/qr_code_model.dart';
 
 import '../../../config/app_text.dart';
 import '../../../config/functions.dart';
 import '../../../config/palette.dart';
+import '../../../model/qr_code_model.dart';
 import '../../../model/scan_history_model.dart';
 import '../../../model/user.dart';
 import '../../../widgets/all_sheet_header.dart';
@@ -66,6 +66,10 @@ class _SheetContainerState extends State<SheetContainer> {
   ///fonction qui nous permet de faire la requette get
   ///sur notre api
   getQrCode({required int qrCodeId}) async {
+    ////////////////////
+    /// eventualité de faire appel a api/qrcodes/id
+    /// si les données devient trop lourde a chargé
+    ///
     QrCodeModel qrCodeModel = await QrCodeModel.qrCodeList.firstWhere(
       (element) => element.id == qrCodeId,
     );
@@ -452,6 +456,7 @@ class _SheetContainerState extends State<SheetContainer> {
     bool isEntree = true,
     required ScanHistoryModel scanHistoryModel,
   }) async {
+    Functions.showLoadingSheet(ctxt: context);
     ///////////////////////////////////
     /// update via APIs here
     Functions.postScanHistory(scanHistoryModel: scanHistoryModel);
@@ -459,12 +464,15 @@ class _SheetContainerState extends State<SheetContainer> {
     /// //////////////////////////////////
     /// if update via APIs is done
     ScanHistoryModel.scanHistories.add(scanHistoryModel);
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Functions.showSnackBar(
-      ctxt: context,
-      messeage: isEntree ? 'Entrée enregistrée !' : 'Sortie enregistrée !',
-    );
+    Future.delayed(const Duration(seconds: 3)).then((value) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Functions.showSnackBar(
+        ctxt: context,
+        messeage: isEntree ? 'Entrée enregistrée !' : 'Sortie enregistrée !',
+      );
+    });
   }
 
   //met a jour l'historique des scans de l'api
@@ -586,9 +594,11 @@ class _SheetContainerState extends State<SheetContainer> {
             alert(
                 ctxt: context,
                 confirm: () {
-                  // Functions.showLoadingSheet(ctxt: context);
+                  Functions.showLoadingSheet(ctxt: context);
                   Functions.updateQrcode(
-                      data: qrcodeData, qrCodeId: qrCodeModel.id);
+                    data: qrcodeData,
+                    qrCodeId: qrCodeModel.id,
+                  );
                   //updateQrcode(data: data, qrCodeId: qrCodeId)
                   Functions.updateUser(data: userData, userId: user.id);
                   Functions.postScanHistory(scanHistoryModel: scanHistoryModel);
@@ -605,6 +615,7 @@ class _SheetContainerState extends State<SheetContainer> {
                   ///
                   Future.delayed(const Duration(seconds: 3)).then(
                     (_) {
+                      Navigator.pop(context);
                       Navigator.pop(context);
                       Navigator.pop(context);
                       Functions.showSnackBar(

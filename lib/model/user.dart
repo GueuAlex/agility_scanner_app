@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:scanner/model/members_model.dart';
+import 'members_model.dart';
 
 User userFromJson(String str) => User.fromJson(json.decode(str));
 
