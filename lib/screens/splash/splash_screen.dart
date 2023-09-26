@@ -77,14 +77,14 @@ class _SplashScreenState extends State<SplashScreen> {
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     Functions.getQrcodesFromApi();
     Functions.getScanHistoriesFromApi();
+    Functions.allEntrepise();
+    Functions.allLivrason();
 
     Future.delayed(const Duration(seconds: 10)).then((_) {
-      if (IsConnec) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          ScanSreen.routeName,
-          (route) => false,
-        );
-      }
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        ScanSreen.routeName,
+        (route) => false,
+      );
     });
 
     super.initState();
@@ -96,14 +96,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 10)).then((_) {
+    /*   Future.delayed(const Duration(seconds: 10)).then((_) {
       if (IsConnec) {
         Navigator.of(context).pushNamedAndRemoveUntil(
           ScanSreen.routeName,
           (route) => false,
         );
       }
-    });
+    }); */
     return Scaffold(
       body: SafeArea(
         child: SizedBox(

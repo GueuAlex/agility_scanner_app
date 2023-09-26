@@ -107,7 +107,7 @@ class User {
       };
 
   static List<User> userList = [
-    /* User(
+    User(
       id: 1,
       genre: "M",
       nom: "Doe",
@@ -237,6 +237,6 @@ class User {
       number: "345678901",
       entrepotVisite: "Entrepôt J",
       motifVisite: "Présentation",
-    ), */
+    ),
   ];
 }

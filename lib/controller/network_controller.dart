@@ -31,19 +31,19 @@ class NetworkController extends GetxController {
     } else {
       if (Get.isSnackbarOpen) {
         Get.closeCurrentSnackbar();
+        Get.rawSnackbar(
+          messageText: ConnectionStateWidget(
+            icon: CupertinoIcons.wifi,
+            text: 'Connexion retablie',
+          ),
+          isDismissible: false,
+          duration: const Duration(seconds: 3),
+          backgroundColor: Colors.transparent,
+          padding: const EdgeInsets.only(top: 2, bottom: 0),
+          margin: EdgeInsets.only(bottom: 15, left: 15, right: 15),
+          snackStyle: SnackStyle.GROUNDED,
+        );
       }
-      Get.rawSnackbar(
-        messageText: ConnectionStateWidget(
-          icon: CupertinoIcons.wifi,
-          text: 'Connexion retablie',
-        ),
-        isDismissible: false,
-        duration: const Duration(seconds: 3),
-        backgroundColor: Colors.transparent,
-        padding: const EdgeInsets.only(top: 2, bottom: 0),
-        margin: EdgeInsets.only(bottom: 15, left: 15, right: 15),
-        snackStyle: SnackStyle.GROUNDED,
-      );
     }
   }
 }

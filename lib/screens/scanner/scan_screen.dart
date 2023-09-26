@@ -120,7 +120,14 @@ class _ScanSreenState extends State<ScanSreen> {
                               Functions.showBottomSheet(
                                 ctxt: context,
                                 widget: SheetContainer(qrValue: code),
-                              );
+                              ).whenComplete(() {
+                                Future.delayed(const Duration(seconds: 5))
+                                    .then((_) {
+                                  setState(() {
+                                    isScanCompleted = false;
+                                  });
+                                });
+                              });
                             } else {
                               ///////////////////////
                               ///sinon on fait vibrer le device
@@ -132,19 +139,20 @@ class _ScanSreenState extends State<ScanSreen> {
                                 widget: const ErrorSheetContainer(
                                   text: 'Qr code invalide !',
                                 ),
-                              );
+                              ).whenComplete(() {
+                                Future.delayed(const Duration(seconds: 5))
+                                    .then((_) {
+                                  setState(() {
+                                    isScanCompleted = false;
+                                  });
+                                });
+                              });
                             }
 
                             ///////////////////
                             /// finalement on temporise 5s et
                             /// on initialise (isScanCompleted) a false
                             /// pour permettre un scan
-                            Future.delayed(const Duration(seconds: 5))
-                                .then((_) {
-                              setState(() {
-                                isScanCompleted = false;
-                              });
-                            });
                           }
                         },
                       ),

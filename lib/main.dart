@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:scanner/screens/add_delivering/add_deli_screen.dart';
+import 'package:scanner/screens/delivering/deliverig_screen.dart';
 
 import 'bloc/internet_bloc/internet_bloc.dart';
 import 'config/functions.dart';
@@ -14,6 +16,7 @@ import 'screens/home/home.dart';
 import 'screens/qr_code_details/qr_code_details_screen.dart';
 import 'screens/scanner/scan_screen.dart';
 import 'screens/scanner/widgets/verify_by_code_sheet.dart';
+import 'screens/search_by_date/deli_search_by_date_screen.dart';
 import 'screens/search_by_date/search_by_date_screen.dart';
 import 'screens/splash/splash_screen.dart';
 
@@ -21,10 +24,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  Timer? _timer;
-  _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+  Timer.periodic(Duration(minutes: 1), (timer) {
     Functions.getQrcodesFromApi();
     Functions.getScanHistoriesFromApi();
+    Functions.allEntrepise();
+    Functions.allLivrason();
   });
 
   runApp(
@@ -81,7 +85,11 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (ctxt) => const LoginScreen(),
         QrCodeDetailsScreen.routeName: (ctxt) => const QrCodeDetailsScreen(),
         VerifyByCodeSheet.routeName: (ctxt) => const VerifyByCodeSheet(),
-        SearchByDateScreen.routeName: (ctxt) => const SearchByDateScreen()
+        SearchByDateScreen.routeName: (ctxt) => const SearchByDateScreen(),
+        DeliveringScreen.routeName: (ctxt) => const DeliveringScreen(),
+        AddDeliScree.routeName: (ctxt) => const AddDeliScree(),
+        DeliSearchByDateScreen.routeName: (ctxt) =>
+            const DeliSearchByDateScreen(),
       },
     );
   }

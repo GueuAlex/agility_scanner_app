@@ -29,6 +29,7 @@ class ScanHistoryModel {
   final DateTime scandDate;
   final String scanHour;
   final String motif;
+  String carId;
 
   ScanHistoryModel({
     required this.id,
@@ -36,16 +37,19 @@ class ScanHistoryModel {
     required this.scandDate,
     required this.scanHour,
     required this.motif,
+    this.carId = '',
   });
 
   factory ScanHistoryModel.fromJson(Map<String, dynamic> json) =>
       ScanHistoryModel(
-        id: json["id"],
-        qrCodeId: json["qr_code_id"],
-        scandDate: DateTime.parse(json["scan_date"]),
-        scanHour: json["scan_hour"].substring(0, 5),
-        motif: json["motif"],
-      );
+          id: json["id"],
+          qrCodeId: json["qr_code_id"],
+          scandDate: DateTime.parse(json["scan_date"]),
+          scanHour: json["scan_hour"].substring(0, 5),
+          motif: json["motif"],
+          carId: json["plaque_immatriculation"] == null
+              ? ''
+              : json["plaque_immatriculation"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -53,6 +57,7 @@ class ScanHistoryModel {
         "scan_date": scandDate.toIso8601String(),
         "scan_hour": scanHour,
         "motif": motif,
+        "plaque_immatriculation": carId,
       };
 
   static DateTime today = DateTime(

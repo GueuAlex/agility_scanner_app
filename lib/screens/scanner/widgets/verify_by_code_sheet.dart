@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
 
@@ -121,14 +120,8 @@ class _VerifyByCodeSheetState extends State<VerifyByCodeSheet> {
                       text: 'Vérifier',
                       onPress: () {
                         if (codeController.text.trim().isEmpty) {
-                          Fluttertoast.showToast(
-                            msg: "Le champ code est obligatoire !",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Palette.primaryColor,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
+                          Functions.showToast(
+                            msg: 'Le champ code est obligatoire !',
                           );
                         } else {
                           final codePattern = RegExp(r'^AG-\d{2}-\d+$');

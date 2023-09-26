@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:scanner/model/entreprise_model.dart';
+import 'package:scanner/model/livraison_model.dart';
 
 import '../model/qr_code_model.dart';
 import '../model/scan_history_model.dart';
+import '../model/user.dart';
 import '../remote_service/remote_service.dart';
 import '../widgets/custom_button.dart';
 import 'app_text.dart';
@@ -24,11 +28,11 @@ class Functions {
   }
 
   /// bottom sheet preconfiguré
-  static showBottomSheet({
+  static Future<void> showBottomSheet({
     required BuildContext ctxt,
     required Widget widget,
-  }) {
-    return showModalBottomSheet(
+  }) async {
+    return await showModalBottomSheet(
       enableDrag: false,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -151,6 +155,21 @@ class Functions {
     return scanList;
   }
 
+  static List<Livraison> getSelectedDateLivraisons({
+    required DateTime selectedDate,
+  }) {
+    print('selectedDate : ${selectedDate}');
+    List<Livraison> deliList = [];
+    deliList.clear();
+    for (Livraison element in Livraison.livraisonList) {
+      print(element.dateVisite);
+      if (element.dateLivraison == selectedDate && element.statutLivraison) {
+        deliList.add(element);
+      }
+    }
+    return deliList;
+  }
+
   // met a jour un qr code
   static Future<dynamic> updateQrcode({
     required Map<String, dynamic> data,
@@ -187,5 +206,136 @@ class Functions {
 // retourne l'historique des qr code depuis l'api
   static getScanHistoriesFromApi() async {
     ScanHistoryModel.scanHistories = await RemoteService().getScanHistories();
+  }
+
+  //retourne la liste de toutes les entreprise
+  static allEntrepise() async {
+    Entreprise.entrepriseList = await RemoteService().getEntrepriseList();
+  }
+
+  //retourne la liste de toutes les entreprise
+  static allLivrason() async {
+    Livraison.livraisonList = await RemoteService().getLivraisonList();
+  }
+
+  /////////////////////////////////
+  ///
+  ///
+  static Future<Null> IsAllRedyScanalert({
+    required BuildContext ctxt,
+    bool isEntree = true,
+    required Function() confirm,
+    required Function() cancel,
+    required User user,
+    required TextField carIdField,
+  }) async {
+    return showDialog(
+      barrierDismissible: false,
+      context: ctxt,
+      builder: (BuildContext ctxt) {
+        return AlertDialog(
+          backgroundColor: Colors.grey.shade200,
+          title: AppText.medium(
+            'Confirmation',
+            fontSize: 12,
+          ),
+          /* content: AppText.small(
+            isEntree
+                ? 'Enregistrer une entrée pour ${user.nom} ${user.prenoms} ?'
+                : 'Enregistrer une sortie pour ${user.nom} ${user.prenoms} ?',
+            textAlign: TextAlign.left,
+          ), */
+          content: ConstrainedBox(
+            constraints: BoxConstraints.expand(height: isEntree ? 70 : 30),
+            child: Column(
+              children: [
+                Expanded(
+                  child: AppText.small(
+                    isEntree
+                        ? 'Saisire la plaque d\'immatriculation si ${user.nom} est véhiculé sinon laissez le champs vide'
+                        : 'Veuillez confirmer la sortie de ${user.nom}',
+                    textAlign: TextAlign.center,
+                    fontSize: 10,
+                  ),
+                ),
+                isEntree
+                    ? Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        margin: const EdgeInsets.only(top: 5),
+                        width: double.infinity,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white,
+                        ),
+                        child: carIdField,
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
+          contentPadding: const EdgeInsets.only(
+            top: 5.0,
+            right: 15.0,
+            left: 15.0,
+          ),
+          titlePadding: const EdgeInsets.only(
+            top: 10,
+            left: 15,
+          ),
+          actions: [
+            TextButton(
+              onPressed: confirm,
+              child: AppText.small(
+                'Confirmer',
+                fontWeight: FontWeight.w500,
+                color: Palette.primaryColor,
+              ),
+            ),
+            TextButton(
+              onPressed: cancel,
+              child: AppText.small(
+                'Annuler',
+                fontWeight: FontWeight.w500,
+                color: Palette.primaryColor,
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  static showToast({required String msg}) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Palette.primaryColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+
+  static Widget getTextField(
+      {required TextEditingController controller, bool isActive = true}) {
+    return TextField(
+      enabled: isActive,
+      controller: controller,
+      keyboardType: TextInputType.text,
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+      ),
+      cursorColor: Colors.black,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+      ),
+    );
   }
 }

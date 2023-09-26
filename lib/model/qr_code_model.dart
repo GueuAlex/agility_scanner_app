@@ -71,14 +71,14 @@ class QrCodeModel {
       };
 
   static List<QrCodeModel> qrCodeList = [
-    /* QrCodeModel(
+    QrCodeModel(
       id: 1,
       isActive: true,
       type: "temporaire",
       dateDebut: DateTime.now(),
       dateFin: DateTime.now().add(const Duration(days: 30)),
       //imgUrl: "imgUrl",
-      codeAssociate: "AG-XF-2023-000",
+      codeAssociate: "AG-23-000",
       isAlreadyScanned: true,
       user: User.userList[0],
     ),
@@ -86,10 +86,10 @@ class QrCodeModel {
         id: 2,
         isActive: true,
         type: "permanent",
-        dateDebut: DateTime.now(),
+        dateDebut: DateTime.now().add(const Duration(days: 7)),
         dateFin: DateTime.now().add(const Duration(days: 70)),
         //imgUrl: "imgUrl",
-        codeAssociate: "AG-XF-2023-001",
+        codeAssociate: "AG-23-001",
         isAlreadyScanned: true,
         user: User.userList[1]),
     QrCodeModel(
@@ -97,9 +97,9 @@ class QrCodeModel {
         isActive: true,
         type: "temporaire",
         dateDebut: DateTime.now().subtract(const Duration(days: 15)),
-        dateFin: DateTime.now().add(const Duration(days: 30)),
+        dateFin: DateTime.now().subtract(const Duration(days: 5)),
         //imgUrl: "imgUrl",
-        codeAssociate: "AG-XF-2023-002",
+        codeAssociate: "AG-23-002",
         isAlreadyScanned: true,
         user: User.userList[2]),
     QrCodeModel(
@@ -109,18 +109,18 @@ class QrCodeModel {
       dateDebut: DateTime.now().subtract(const Duration(days: 5)),
       dateFin: DateTime.now().add(const Duration(days: 100)),
       //imgUrl: "imgUrl",
-      codeAssociate: "AG-XF-2023-003",
+      codeAssociate: "AG-23-003",
       isAlreadyScanned: true,
       user: User.userList[3],
     ),
     QrCodeModel(
       id: 5,
-      isActive: false,
+      isActive: true,
       type: "temporaire",
       dateDebut: DateTime.now(),
       dateFin: DateTime.now().add(const Duration(days: 30)),
       //imgUrl: "imgUrl",
-      codeAssociate: "AG-XF-2023-004",
+      codeAssociate: "AG-23-004",
       isAlreadyScanned: false,
       user: User.userList[4],
     ),
@@ -178,6 +178,6 @@ class QrCodeModel {
       codeAssociate: "AG-XF-2023-009",
       isAlreadyScanned: true,
       user: User.userList[9],
-    ), */
+    ),
   ];
 }

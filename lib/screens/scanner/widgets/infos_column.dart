@@ -38,6 +38,7 @@ class InfosColumn extends StatelessWidget {
             fontSize: 11,
             fontWeight: FontWeight.w500,
             color: Colors.grey,
+            textOverflow: TextOverflow.ellipsis,
           ),
           widget,
         ],

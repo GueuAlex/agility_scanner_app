@@ -1,3 +1,5 @@
+import 'package:scanner/screens/delivering/deliverig_screen.dart';
+
 import '../screens/home/home.dart';
 import '../screens/scanner/scan_screen.dart';
 
@@ -21,6 +23,11 @@ class SideBarItemModel {
       title: 'Scanner',
       svg: 'assets/icons/qr.svg',
       routeName: ScanSreen.routeName,
+    ),
+    SideBarItemModel(
+      title: 'Livraison',
+      svg: 'assets/icons/delivery.svg',
+      routeName: DeliveringScreen.routeName,
     ),
     const SideBarItemModel(
       title: 'Besoin d\'aide ?',

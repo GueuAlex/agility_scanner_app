@@ -44,7 +44,10 @@ class _SheetContainerState extends State<SheetContainer> {
   ///////////////////
   final TextEditingController iDController = TextEditingController();
   final TextEditingController cariDController = TextEditingController();
-  //////////////
+  final TextEditingController cariDController2 = TextEditingController();
+  /////////////////////
+  ///
+  String alertCarIDValue = '';
 
   User? user;
   QrCodeModel? _qrCodeModel;
@@ -184,6 +187,9 @@ class _SheetContainerState extends State<SheetContainer> {
     );
   }
 
+  ///
+  ///////////////////////////////////////////////////////////////////
+
 // widget retourné si un qr code a deja été scané
   Widget isAlreadyScanWidget({
     required User user,
@@ -248,19 +254,38 @@ class _SheetContainerState extends State<SheetContainer> {
               scanHour: hours,
               motif: 'Entrée',
             );
+            setState(() {
+              cariDController2.text = user.plaqueVehicule;
+            });
             /////////////////////////////////////////////////
             /// on affiche une alerte modale pour la
             /// confirmation
-            alert(
+            Functions.IsAllRedyScanalert(
+              carIdField: getTextfiel(
+                controller: cariDController2,
+                //hintext: user.plaqueVehicule,
+              ),
               ctxt: context,
               user: user,
               confirm: () => upDateScanHistory(
-                // on appel upDateScanHistory() si c'est confirmé
+                carID: cariDController2.text,
                 scanHistoryModel: scanHistoryModel,
               ),
               cancel: () => Navigator.pop(
                   context), // sinon Navigator.pop(context) si c'est annuler
             );
+            /* _showDialog(ctxt: context, textField: [
+              DialogTextField(
+                validator: (value) {
+                  if (value != null) {
+                    print(value);
+                    alertCarIDValue = value;
+                  }
+                  print('------- $alertCarIDValue');
+                  return;
+                },
+              )
+            ]); */
           },
         ),
         const SizedBox(
@@ -287,15 +312,23 @@ class _SheetContainerState extends State<SheetContainer> {
               scanHour: hours,
               motif: 'Sortie',
             );
+            setState(() {
+              cariDController2.text = '';
+            });
             /////////////////////////////////////////////////
             /// on affiche une alerte modale pour la
             /// confirmation
-            alert(
+            Functions.IsAllRedyScanalert(
+              carIdField: getTextfiel(
+                controller: cariDController2,
+                // hintext: user.plaqueVehicule,
+              ),
               ctxt: context,
               isEntree: false,
               user: user,
               confirm: () => upDateScanHistory(
                 // on appel upDateScanHistory() si c'est confirmé
+                carID: cariDController2.text,
                 scanHistoryModel: scanHistoryModel,
                 isEntree: false,
               ),
@@ -405,6 +438,7 @@ class _SheetContainerState extends State<SheetContainer> {
     required Function() confirm,
     required Function() cancel,
     required User user,
+    //required TextField carIdField,
   }) async {
     return showDialog(
       barrierDismissible: false,
@@ -451,14 +485,19 @@ class _SheetContainerState extends State<SheetContainer> {
     );
   }
 
+/* l'alert dialog afficher lorsque qr code à déjà été scanné */
+////////////////
+
 //met a jour l'historique des scans de l'api
   Future<void> upDateScanHistory({
+    required String carID,
     bool isEntree = true,
     required ScanHistoryModel scanHistoryModel,
   }) async {
     Functions.showLoadingSheet(ctxt: context);
     ///////////////////////////////////
     /// update via APIs here
+    scanHistoryModel.carId = carID;
     Functions.postScanHistory(scanHistoryModel: scanHistoryModel);
 
     /// //////////////////////////////////
@@ -678,6 +717,38 @@ class _SheetContainerState extends State<SheetContainer> {
     );
   }
 
+  //widget retourné si la date de visite n'est pas encore atteinte
+  Widget dateExpiree({required DateTime dateFin}) {
+    return Container(
+      padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+      child: Center(
+        child: Column(
+          children: [
+            AppText.medium('Qr code expiré !'),
+            const SizedBox(
+              height: 5,
+            ),
+            AppText.small(
+              'Ce code a expiré depuis le\n${DateFormat('EEEE dd MMMM yyyy', 'fr_FR').format(dateFin)}',
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            CustomButton(
+              color: Palette.primaryColor,
+              width: double.infinity,
+              height: 35,
+              radius: 5,
+              text: 'Retour',
+              onPress: () => Navigator.pop(context),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 // widget retourné si le qr code inactif
   Widget inactifQrCode() {
     return Container(
@@ -696,7 +767,7 @@ class _SheetContainerState extends State<SheetContainer> {
             ),
           ),
           AppText.medium('Oops !'),
-          AppText.small('Qr code inactif !'),
+          AppText.small('Votre Qr code est désactivé !'),
           const SizedBox(
             height: 20,
           ),
@@ -721,7 +792,9 @@ class _SheetContainerState extends State<SheetContainer> {
   ///   2. si le qr code est actif
   ///       2.1. s'il est actif et s'il n'a pas déjà été scanné
   ///       2.2. s'il est actif et a déjà été scanné
-  ///   3. si le qr code n'est pas actif
+  ///   3. si la date de visite est passée
+  ///   4. si le qr code n'est pas actif
+  ///
   ///
   Widget getWidget({
     required QrCodeModel qrCodeModel,
@@ -734,6 +807,20 @@ class _SheetContainerState extends State<SheetContainer> {
       qrCodeModel.dateDebut.month,
       qrCodeModel.dateDebut.day,
     );
+
+    ////////////////////////////////////////
+    /// 3. si la date vite est passée
+    if (qrCodeModel.dateFin != null) {
+      DateTime dateFin = DateTime(
+        qrCodeModel.dateFin!.year,
+        qrCodeModel.dateFin!.month,
+        qrCodeModel.dateFin!.day,
+      );
+      if (dateFin.isBefore(Functions.getToday())) {
+        return dateExpiree(dateFin: dateFin);
+      }
+    }
+
     ////////////////////////////////////////////////////
     ///   1. la date de visite n'est pas encre arrivé
     if (dateDebut.isAfter(Functions.getToday())) {
@@ -762,11 +849,31 @@ class _SheetContainerState extends State<SheetContainer> {
             qrCodeModel: qrCodeModel, user: qrCodeModel.user);
       }
     }
+
     ////////////////////////////////////////
-    /// 3. si le qr code n'est pas actif
+    /// 4. si le qr code n'est pas actif
     return inactifQrCode();
   }
 
   /////////////////::
   ///
+  ///
+  TextField getTextfiel({
+    required TextEditingController controller,
+    //required String hintext,
+  }) {
+    return TextField(
+      controller: controller,
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+      ),
+      cursorColor: Colors.black,
+      decoration: InputDecoration(
+        //label: AppText.medium(hintext),
+        border: InputBorder.none,
+      ),
+    );
+  }
 }

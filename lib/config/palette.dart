@@ -33,13 +33,14 @@ class Palette {
   ///E6E6E6
 ///////////////////////////////////////////////////
   //////////////////////colors//////////////////////
-  ///
+  ///#e6e6e6
   ///
   static const Color primaryColor = Color(0xFFb0292e);
   //static const Color primaryColor = Color(0xFF0434b5);
   static const Color secondaryColor = Color(0xFFe4662d);
   //static const Color secondaryColor = Color(0xFFac4c84);
   /////////
+  static const Color coverBg = Color(0xFFe6e6e6);
   static const Color appPrimaryColor = Color(0xFFf5a535);
   static const Color appSecondaryColor = Color(0xFFf2c17e);
   static const Color whiteColor = Color(0xFFFFFFFF);

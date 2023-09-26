@@ -1,14 +1,16 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:scanner/model/entreprise_model.dart';
+import 'package:scanner/model/livraison_model.dart';
 
 import '../model/qr_code_model.dart';
 import '../model/scan_history_model.dart';
 
 ///////////////// base uri//////////////
 //const baseUri = 'http://194.163.136.227:8087/api/';
-//const baseUri = 'https://agility.digifaz.com/api/';
-const baseUri = 'https://agility-app.com/api/';
+const baseUri = 'https://agility.digifaz.com/api/';
+//const baseUri = 'https://agility-app.com/api/';
 
 ///////////////////////////////////////
 ///
@@ -229,5 +231,42 @@ class RemoteService {
       } */
       return null;
     }
+  }
+
+  ////////////////////////////////////////////////////////////
+  /// get all entreprise in our BD
+  ///////
+  Future<List<Entreprise>> getEntrepriseList() async {
+    var uri = Uri.parse(baseUri + 'livraisons');
+    var response = await client.get(uri);
+    // print('my user Dans remote /////////////////////////// : ${response.body}');
+    // print('Dans remote////////////////////////////// : ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var json = response.body;
+      //print(response.body);
+      List<Entreprise> list = entrepriseListFromJson(json);
+      print('entreprise list : ${list.length}');
+      return list;
+    }
+    return [];
+  }
+
+  ////////////////////////////////////////////////////////////
+  /// get all entreprise in our BD
+  ///////
+  Future<List<Livraison>> getLivraisonList() async {
+    print('bonjour');
+    var uri = Uri.parse(baseUri + 'liste');
+    var response = await client.get(uri);
+    // print('my user Dans remote /////////////////////////// : ${response.body}');
+    // print('Dans remote////////////////////////////// : ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var json = response.body;
+      //print(response.body);
+      List<Livraison> list = livraisonListFromJson(json);
+      print('deli list : ${list.length}');
+      return list;
+    }
+    return [];
   }
 }
