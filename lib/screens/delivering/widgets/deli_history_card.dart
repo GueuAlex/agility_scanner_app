@@ -39,13 +39,20 @@ class DeliHistoryCard extends StatelessWidget {
             fontSize: 12,
           ),
           subtitle: AppText.small(
-            '${DateFormat('HH:mm', 'fr_FR').format(livraison.dateLivraison!)}  \u2022 Par ${livraison.nom}  ',
+            '${livraison.heureEntree!.substring(0, 5)}  \u2022 Par ${livraison.nom}  ',
             textOverflow: TextOverflow.fade,
           ),
-          trailing: Icon(
-            CupertinoIcons.chevron_right,
-            size: 15,
-            color: Palette.greyColor,
+          trailing: FittedBox(
+            child: Row(
+              children: [
+                AppText.small(livraison.status),
+                Icon(
+                  CupertinoIcons.chevron_right,
+                  size: 15,
+                  color: Palette.greyColor,
+                ),
+              ],
+            ),
           ),
         ),
       ),

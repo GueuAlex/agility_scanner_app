@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scanner/config/app_text.dart';
+import 'package:scanner/config/functions.dart';
 import 'package:scanner/config/palette.dart';
 import 'package:scanner/model/entreprise_model.dart';
 import 'package:scanner/model/livraison_model.dart';
 import 'package:scanner/screens/scanner/widgets/infos_column.dart';
+import 'package:scanner/widgets/custom_button.dart';
+
+import '../../remote_service/remote_service.dart';
 
 class DeliDetailSheet extends StatefulWidget {
   final Livraison deli;
-  const DeliDetailSheet({required this.deli, super.key});
+  final bool isFinish;
+  const DeliDetailSheet({required this.deli, this.isFinish = false, super.key});
 
   @override
   State<DeliDetailSheet> createState() => _DeliDetailSheetState();
@@ -39,7 +44,7 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
     final size = MediaQuery.of(context).size;
 
     return Container(
-      height: size.height / 1.8,
+      height: size.height / 1.4,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -72,13 +77,13 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 5),
-                        AppText.medium('livreur'),
+                        AppText.medium('Livreur'),
                         Row(
                           children: [
                             Expanded(
                               child: InfosColumn(
                                 opacity: 0.1,
-                                label: 'nom et prenoms',
+                                label: 'Nom et prénoms',
                                 widget: AppText.medium(
                                   '${widget.deli.nom} ${widget.deli.prenoms}',
                                   fontSize: 13,
@@ -91,7 +96,7 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
                             Expanded(
                               child: InfosColumn(
                                 opacity: 0.1,
-                                label: 'numéro',
+                                label: 'Numéro',
                                 widget: AppText.medium(
                                   '${widget.deli.telephone}',
                                   fontSize: 13,
@@ -103,13 +108,13 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
                           ],
                         ),
                         const SizedBox(height: 5),
-                        AppText.medium('livraison'),
+                        AppText.medium('Livraison'),
                         Row(
                           children: [
                             Expanded(
                               child: InfosColumn(
                                 opacity: 0.1,
-                                label: 'date',
+                                label: 'Date',
                                 widget: AppText.medium(
                                   DateFormat('EE dd MMM yyyy', 'fr_FR')
                                       .format(widget.deli.dateVisite),
@@ -123,10 +128,26 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
                             Expanded(
                               child: InfosColumn(
                                 opacity: 0.1,
-                                label: 'heure',
+                                label: 'Heure \d’entrée',
                                 widget: AppText.medium(
-                                  DateFormat('HH:mm', 'fr_FR')
-                                      .format(widget.deli.dateLivraison!),
+                                  widget.deli.heureEntree!,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  textOverflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 3),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: InfosColumn(
+                                opacity: 0.1,
+                                label: 'Bon de commande',
+                                widget: AppText.medium(
+                                  '${widget.deli.numBonCommande}',
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                   textOverflow: TextOverflow.ellipsis,
@@ -137,15 +158,15 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
                             Expanded(
                               child: InfosColumn(
                                 opacity: 0.1,
-                                label: 'bon de commande',
+                                label: 'Statut',
                                 widget: AppText.medium(
-                                  '${widget.deli.numBonCommande}',
+                                  '${widget.deli.status}',
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                   textOverflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                         const SizedBox(height: 5),
@@ -155,7 +176,7 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
                             Expanded(
                               child: InfosColumn(
                                 opacity: 0.1,
-                                label: 'par',
+                                label: 'Par',
                                 widget: AppText.medium(
                                   '${widget.deli.entreprise}',
                                   fontSize: 13,
@@ -168,7 +189,7 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
                             Expanded(
                               child: InfosColumn(
                                 opacity: 0.1,
-                                label: 'véhicule',
+                                label: 'Véhicule',
                                 widget: AppText.medium(
                                   '${widget.deli.immatriculation}',
                                   fontSize: 13,
@@ -185,7 +206,7 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
                             Expanded(
                               child: InfosColumn(
                                 opacity: 0.1,
-                                label: 'pour',
+                                label: 'Pour',
                                 widget: AppText.medium(
                                   '${_ent!.nom}',
                                   fontSize: 13,
@@ -209,6 +230,39 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
                             )
                           ],
                         ),
+                        const SizedBox(height: 25),
+                        widget.isFinish
+                            ? CustomButton(
+                                color: Palette.primaryColor,
+                                width: double.infinity,
+                                height: 35,
+                                radius: 5,
+                                text: 'Livraison terminée ?',
+                                onPress: () {
+                                  Functions.showLoadingSheet(ctxt: context);
+                                  String heureSortir =
+                                      DateFormat('HH:mm', 'fr_FR').format(
+                                    DateTime.now(),
+                                  );
+                                  Map<String, dynamic> data = {
+                                    "heure_sortie": heureSortir,
+                                    "status": "terminée",
+                                  };
+                                  RemoteService()
+                                      .putSomethings(
+                                    api: 'livraisons/${widget.deli.id}',
+                                    data: data,
+                                  )
+                                      .then((value) {
+                                    Functions.showToast(
+                                      msg: 'Livraison terminée',
+                                    );
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  });
+                                },
+                              )
+                            : Container(),
                       ],
                     ),
                   ),

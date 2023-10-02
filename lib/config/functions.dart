@@ -162,8 +162,9 @@ class Functions {
     List<Livraison> deliList = [];
     deliList.clear();
     for (Livraison element in Livraison.livraisonList) {
-      print(element.dateVisite);
-      if (element.dateLivraison == selectedDate && element.statutLivraison) {
+      print(element.dateLivraison);
+      if (element.dateLivraison == selectedDate &&
+          element.status != 'en attente') {
         deliList.add(element);
       }
     }
@@ -214,7 +215,7 @@ class Functions {
   }
 
   //retourne la liste de toutes les entreprise
-  static allLivrason() async {
+  static Future<void> allLivrason() async {
     Livraison.livraisonList = await RemoteService().getLivraisonList();
   }
 

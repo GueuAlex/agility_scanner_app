@@ -58,7 +58,7 @@ class Entreprise {
       };
 
   static List<Entreprise> entrepriseList = [
-    /* Entreprise(
+    Entreprise(
       id: 1,
       logo: 'logo1.png',
       nom: 'Entreprise A',
@@ -97,6 +97,6 @@ class Entreprise {
       telephone: '5544332211',
       email: 'entrepriseE@example.com',
       livraisons: [Livraison.livraisonList[4]],
-    ), */
+    ),
   ];
 }

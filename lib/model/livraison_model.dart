@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:scanner/config/functions.dart';
+
 ///////////////////////////////// single /////////////////////////////////////
 Livraison livraisonFromJson(String str) => Livraison.fromJson(json.decode(str));
 
@@ -30,6 +32,9 @@ class Livraison {
   DateTime? dateLivraison;
   DateTime dateVisite;
   DateTime? dateFinVisite;
+  String status;
+  String? heureEntree;
+  String? heureSortie;
 
   Livraison({
     required this.id,
@@ -49,36 +54,40 @@ class Livraison {
     required this.dateVisite,
     required this.dateFinVisite,
     required this.dateLivraison,
+    required this.status,
+    this.heureEntree = null,
+    this.heureSortie = null,
   });
 
   factory Livraison.fromJson(Map<String, dynamic> json) => Livraison(
-        id: json["id"],
-        // userId: json["user_id"],
-        compagnyId: json["compagny_id"],
-        // active: json["active"],
-        nom: json["nom"] == null ? '' : json["nom"],
-        prenoms: json["prenoms"] == null ? '' : json["prenoms"],
-        numBonCommande:
-            json["num_bon_commande"] == null ? '' : json["num_bon_commande"],
-        codeFournisseur:
-            json["code_fournisseur"] == null ? '' : json["code_fournisseur"],
-        immatriculation:
-            json["immatriculation"] == null ? '' : json["immatriculation"],
-        telephone: json["telephone"] == null ? '' : json["telephone"],
-        email: json["email"] == null ? '' : json["email"],
-        entreprise: json["entreprise"] == null ? '' : json["entreprise"],
-        entrepotVisite:
-            json["entrepot_visite"] == null ? '' : json["entrepot_visite"],
-        statutLivraison: json["statut_livraison"] == 0 ? false : true,
-        dateVisite: DateTime.parse(json["date_visite"]),
-        dateFinVisite: json["date_fin_visite"] != null
-            ? DateTime.parse(json["date_fin_visite"])
-            : null,
-
-        dateLivraison: json["date_livraison"] != null
-            ? DateTime.parse(json["date_livraison"])
-            : null,
-      );
+      id: json["id"],
+      // userId: json["user_id"],
+      compagnyId: json["compagny_id"],
+      // active: json["active"],
+      nom: json["nom"] == null ? '' : json["nom"],
+      prenoms: json["prenoms"] == null ? '' : json["prenoms"],
+      numBonCommande:
+          json["num_bon_commande"] == null ? '' : json["num_bon_commande"],
+      codeFournisseur:
+          json["code_fournisseur"] == null ? '' : json["code_fournisseur"],
+      immatriculation:
+          json["immatriculation"] == null ? '' : json["immatriculation"],
+      telephone: json["telephone"] == null ? '' : json["telephone"],
+      email: json["email"] == null ? '' : json["email"],
+      entreprise: json["entreprise"] == null ? '' : json["entreprise"],
+      entrepotVisite:
+          json["entrepot_visite"] == null ? '' : json["entrepot_visite"],
+      statutLivraison: json["statut_livraison"] == 0 ? false : true,
+      dateVisite: DateTime.parse(json["date_visite"]),
+      dateFinVisite: json["date_fin_visite"] != null
+          ? DateTime.parse(json["date_fin_visite"])
+          : null,
+      dateLivraison: json["date_livraison"] != null
+          ? DateTime.parse(json["date_livraison"])
+          : null,
+      status: json["status"] == null ? '' : json["status"],
+      heureEntree: json["heure_entree"] == null ? '' : json["heure_entree"],
+      heureSortie: json["heure_sortie"] == null ? '' : json["heure_sortie"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -96,7 +105,8 @@ class Livraison {
         "entrepot_visite": entrepotVisite,
         "statut_livraison": statutLivraison,
         "date_visite": dateVisite.toIso8601String(),
-        "date_livraison": dateLivraison!.toIso8601String()
+        "date_livraison": dateLivraison!.toIso8601String(),
+        "status": status,
       };
 
 /* copy with methode */
@@ -115,7 +125,9 @@ class Livraison {
     bool? statutLivraison,
     DateTime? dateVisite,
     DateTime? dateFinVisite,
-    //String? heureDeDeli,
+    String? status,
+    String? heureEntree,
+    String? heureSortie,
   }) {
     return Livraison(
       id: id ?? this.id,
@@ -133,6 +145,9 @@ class Livraison {
       dateVisite: dateVisite ?? this.dateVisite,
       dateFinVisite: dateFinVisite ?? this.dateFinVisite,
       dateLivraison: dateLivraison ?? this.dateLivraison,
+      status: status ?? this.status,
+      heureEntree: heureEntree ?? this.heureEntree,
+      heureSortie: heureSortie ?? this.heureSortie,
     );
   }
 
@@ -155,6 +170,9 @@ class Livraison {
       dateVisite: DateTime(2023, 9, 21),
       dateFinVisite: DateTime(2023, 9, 25),
       dateLivraison: null,
+      status: 'en attente',
+      heureEntree: '',
+      heureSortie: '',
     ),
     Livraison(
       id: 2,
@@ -170,49 +188,56 @@ class Livraison {
       email: 'alice.smith@example.com',
       entreprise: 'Entreprise B',
       entrepotVisite: 'Entrepôt 2',
-      statutLivraison: true,
+      statutLivraison: false,
       dateVisite: DateTime(2023, 8, 18),
       dateFinVisite: DateTime(2023, 8, 19),
-      dateLivraison: DateTime.now(),
+      dateLivraison: Functions.getToday(),
+      status: 'en cours',
+      heureEntree: '12:30',
+      heureSortie: '',
     ),
     Livraison(
-      id: 3,
-      //userId: 103,
-      compagnyId: 3,
-      //active: 1,
-      nom: 'Johnson',
-      prenoms: 'Michael',
-      numBonCommande: 'BC_789',
-      codeFournisseur: 'CF123',
-      immatriculation: 'IM456',
-      telephone: '1122334455',
-      email: 'michael.johnson@example.com',
-      entreprise: 'Entreprise C',
-      entrepotVisite: 'Entrepôt 3',
-      statutLivraison: true,
-      dateVisite: DateTime(2023, 8, 20),
-      dateFinVisite: DateTime(2023, 8, 21),
-      dateLivraison: DateTime.now(),
-    ),
+        id: 3,
+        //userId: 103,
+        compagnyId: 3,
+        //active: 1,
+        nom: 'Johnson',
+        prenoms: 'Michael',
+        numBonCommande: 'BC_789',
+        codeFournisseur: 'CF123',
+        immatriculation: 'IM456',
+        telephone: '1122334455',
+        email: 'michael.johnson@example.com',
+        entreprise: 'Entreprise C',
+        entrepotVisite: 'Entrepôt 3',
+        statutLivraison: true,
+        dateVisite: DateTime(2023, 8, 20),
+        dateFinVisite: DateTime(2023, 8, 21),
+        dateLivraison: Functions.getToday(),
+        status: "terminée",
+        heureSortie: "12:45",
+        heureEntree: "1030"),
     Livraison(
-      id: 4,
-      //  userId: 104,
-      compagnyId: 1,
-      // active: 0,
-      nom: 'Brown',
-      prenoms: 'Jessica',
-      numBonCommande: 'BC_101',
-      codeFournisseur: 'CF234',
-      immatriculation: 'IM567',
-      telephone: '9988776655',
-      email: 'jessica.brown@example.com',
-      entreprise: 'Entreprise A',
-      entrepotVisite: 'Entrepôt 1',
-      statutLivraison: true,
-      dateVisite: DateTime(2023, 9, 18),
-      dateFinVisite: DateTime(2023, 8, 23),
-      dateLivraison: DateTime.now(),
-    ),
+        id: 4,
+        //  userId: 104,
+        compagnyId: 1,
+        // active: 0,
+        nom: 'Brown',
+        prenoms: 'Jessica',
+        numBonCommande: 'BC_101',
+        codeFournisseur: 'CF234',
+        immatriculation: 'IM567',
+        telephone: '9988776655',
+        email: 'jessica.brown@example.com',
+        entreprise: 'Entreprise A',
+        entrepotVisite: 'Entrepôt 1',
+        statutLivraison: false,
+        dateVisite: DateTime(2023, 9, 18),
+        dateFinVisite: DateTime(2023, 8, 23),
+        dateLivraison: Functions.getToday(),
+        status: 'en cours',
+        heureSortie: '',
+        heureEntree: '15:45'),
     Livraison(
       id: 5,
       //userId: 105,
@@ -227,10 +252,13 @@ class Livraison {
       email: 'robert.taylor@example.com',
       entreprise: 'Entreprise B',
       entrepotVisite: 'Entrepôt 2',
-      statutLivraison: true,
+      statutLivraison: false,
       dateVisite: DateTime(2023, 9, 19),
       dateFinVisite: DateTime(2023, 9, 25),
-      dateLivraison: DateTime.now(),
+      dateLivraison: null,
+      status: 'en attente',
+      heureEntree: '',
+      heureSortie: '',
     ),
   ];
 }

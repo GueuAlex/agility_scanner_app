@@ -58,7 +58,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
           ),
           Padding(
             padding: EdgeInsets.only(right: 16.0, left: 16.0),
-            child: AppText.medium('Nouvell livraison'),
+            child: AppText.medium('Nouvelle livraison'),
           ),
           SizedBox(
             height: 5,
@@ -68,7 +68,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
             child: InfosColumn(
               height: 50,
               opacity: 0.2,
-              label: 'Nom de l\'entrprise',
+              label: 'Nom de l\'entreprise',
               widget: Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 6),
