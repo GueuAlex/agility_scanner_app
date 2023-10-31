@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:scanner/config/functions.dart';
 import 'package:scanner/model/livraison_model.dart';
 import 'package:scanner/screens/deli_details/deli_details_sheet.dart';

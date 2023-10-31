@@ -97,7 +97,7 @@ class _ScanSreenState extends State<ScanSreen> {
                         onDetect: (barcodes, args) {
                           if (!isScanCompleted) {
                             ////////////////
-                            /// code donnée que le qrcode continet
+                            /// code =  données que le qrcode continet
                             String code = barcodes.rawValue ?? '...';
                             //print(code);
                             //////////////

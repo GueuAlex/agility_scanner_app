@@ -9,8 +9,8 @@ import '../model/scan_history_model.dart';
 
 ///////////////// base uri//////////////
 //const baseUri = 'http://194.163.136.227:8087/api/';
-const baseUri = 'https://agility.digifaz.com/api/';
-//const baseUri = 'https://agility-app.com/api/';
+//const baseUri = 'https://agility.digifaz.com/api/';
+const baseUri = 'https://agility-app.com/api/';
 
 ///////////////////////////////////////
 ///
@@ -32,7 +32,7 @@ class RemoteService {
       var json = response.body;
       //print(response.body);
       List<QrCodeModel> qrCodeModel = qrCodeModelListFromJson(json);
-      print('qr code list : ${qrCodeModel.length}');
+      //print('qr code list : ${qrCodeModel.length}');
       return qrCodeModel;
     }
     return [];
@@ -52,7 +52,7 @@ class RemoteService {
       var json = response.body;
       //print(response.body);
       List<ScanHistoryModel> qrCodeModel = scanHistoryModelListFromJson(json);
-      print('scan history : ${qrCodeModel.length}');
+      //print('scan history : ${qrCodeModel.length}');
       return qrCodeModel;
     }
     return [];
@@ -245,7 +245,7 @@ class RemoteService {
       var json = response.body;
       //print(response.body);
       List<Entreprise> list = entrepriseListFromJson(json);
-      print('entreprise list : ${list.length}');
+      //print('entreprise list : ${list.length}');
       return list;
     }
     return [];
@@ -255,7 +255,7 @@ class RemoteService {
   /// get all entreprise in our BD
   ///////
   Future<List<Livraison>> getLivraisonList() async {
-    print('bonjour');
+    //print('bonjour');
     var uri = Uri.parse(baseUri + 'liste');
     var response = await client.get(uri);
     // print('my user Dans remote /////////////////////////// : ${response.body}');
@@ -264,7 +264,7 @@ class RemoteService {
       var json = response.body;
       //print(response.body);
       List<Livraison> list = livraisonListFromJson(json);
-      print('deli list : ${list.length}');
+      //print('deli list : ${list.length}');
       return list;
     }
     return [];
