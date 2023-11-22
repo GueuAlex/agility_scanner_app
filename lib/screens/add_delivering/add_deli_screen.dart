@@ -504,7 +504,7 @@ class _AddDeliScreeState extends State<AddDeliScree> {
                       width: size.width,
                       child: Center(
                         child: AppText.medium(
-                          'Aucune livraison n\'est disponibl\n pour cette entreprese',
+                          'Aucune livraison n\'est disponibl\n pour cette entreprise',
                           textAlign: TextAlign.center,
                         ),
                       ),
