@@ -99,7 +99,7 @@ class _ScanSreenState extends State<ScanSreen> {
                             ////////////////
                             /// code =  données que le qrcode continet
                             String code = barcodes.rawValue ?? '...';
-                            //print(code);
+                            print('qr code value is : $code');
                             //////////////
                             /// booleen permettant de connaitre l'etat
                             /// du process de scanning

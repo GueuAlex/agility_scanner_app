@@ -29,7 +29,7 @@ class SideBarItemModel {
       svg: 'assets/icons/delivery.svg',
       routeName: DeliveringScreen.routeName,
     ),
-    const SideBarItemModel(
+    /* const SideBarItemModel(
       title: 'Besoin d\'aide ?',
       svg: 'assets/icons/life-ring.svg',
       routeName: '',
@@ -38,7 +38,7 @@ class SideBarItemModel {
       title: 'A propos de nous',
       svg: 'assets/icons/exclamation.svg',
       routeName: '',
-    ),
+    ), */
     const SideBarItemModel(
       title: 'Déconnexion',
       svg: 'assets/icons/power.svg ',

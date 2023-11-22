@@ -30,8 +30,10 @@ class _DeliDetailSheetState extends State<DeliDetailSheet> {
   ///
   @override
   void initState() {
-    getEntreprise(id: widget.deli.id, entList: Entreprise.entrepriseList)
-        .then((value) {
+    getEntreprise(
+      id: widget.deli.compagnyId,
+      entList: Entreprise.entrepriseList,
+    ).then((value) {
       setState(() {
         isLoading = false;
       });

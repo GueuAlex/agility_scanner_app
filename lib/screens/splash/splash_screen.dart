@@ -4,6 +4,8 @@ import 'dart:developer' as developer;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:scanner/screens/auth/pin_code_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/app_text.dart';
 import '../../config/functions.dart';
@@ -80,11 +82,23 @@ class _SplashScreenState extends State<SplashScreen> {
     Functions.allEntrepise();
     Functions.allLivrason();
 
-    Future.delayed(const Duration(seconds: 10)).then((_) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        ScanSreen.routeName,
-        (route) => false,
-      );
+    Future.delayed(const Duration(seconds: 10)).then((_) async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool? isFirstTime = await prefs.getBool('asAuth');
+      if (isFirstTime != null && isFirstTime) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          ScanSreen.routeName,
+          (route) => false,
+        );
+      } else {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          PincodeScreen.routeName,
+          (route) => false,
+        );
+      }
+      /* Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return SampleApp();
+      })); */
     });
 
     super.initState();

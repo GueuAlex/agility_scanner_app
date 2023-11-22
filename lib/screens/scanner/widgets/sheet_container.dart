@@ -74,7 +74,7 @@ class _SheetContainerState extends State<SheetContainer> {
     /// si les données devient trop lourde a chargé
     ///
     QrCodeModel qrCodeModel = await QrCodeModel.qrCodeList.firstWhere(
-      (element) => element.id == qrCodeId,
+      (element) => element.id == qrCodeId, // ??
     );
     _qrCodeModel = qrCodeModel;
     user = _qrCodeModel!.user;

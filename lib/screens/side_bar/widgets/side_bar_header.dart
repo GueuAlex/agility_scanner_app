@@ -38,7 +38,7 @@ class SideBarHeader extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Image.asset(
-                'assets/images/black-woman.png',
+                'assets/images/app_icon.jpg',
                 fit: BoxFit.cover,
               ),
             ),
@@ -54,17 +54,17 @@ class SideBarHeader extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                AppText.medium('Nom du contrôleur'),
+                AppText.medium('Agility'),
                 FittedBox(
                   child: AppText.large(
-                    'M2063LG4K',
+                    'QR Code Scanner',
                     fontSize: 18,
                     textAlign: TextAlign.center,
                     //textOverflow: TextOverflow.ellipsis,
                   ),
                 ),
                 AppText.small(
-                  'Agent contrôleur \u2022 Agility \u2022 2015',
+                  'Agent \u2022 contrôleur \u2022 Agility',
                   fontSize: 10,
                 )
               ],

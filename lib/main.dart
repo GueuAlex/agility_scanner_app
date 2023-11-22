@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:scanner/screens/add_delivering/add_deli_screen.dart';
+import 'package:scanner/screens/auth/pin_code_screen.dart';
 import 'package:scanner/screens/delivering/deliverig_screen.dart';
 
 import 'bloc/internet_bloc/internet_bloc.dart';
@@ -90,6 +91,7 @@ class MyApp extends StatelessWidget {
         AddDeliScree.routeName: (ctxt) => const AddDeliScree(),
         DeliSearchByDateScreen.routeName: (ctxt) =>
             const DeliSearchByDateScreen(),
+        PincodeScreen.routeName: (ctxt) => const PincodeScreen(),
       },
     );
   }

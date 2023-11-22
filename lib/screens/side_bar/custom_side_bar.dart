@@ -93,17 +93,18 @@ class _CustomSiderBarState extends State<CustomSiderBar> {
   Widget builBottomArea(BuildContext context, double paddingBottom) {
     return Column(
       children: [
-        SideBarItem(
-            asset: 'assets/icons/power.svg',
-            title: 'Déconnexion',
-            // isLast: true,
-            onTap: () {
-              Navigator.pop(context);
-              Functions.showSnackBar(
-                ctxt: context,
-                messeage: 'Disponible bientôt',
-              );
-            }),
+        /* SideBarItem(
+          asset: 'assets/icons/power.svg',
+          title: 'Déconnexion',
+          // isLast: true,
+          onTap: () {
+            Navigator.pop(context);
+            Functions.showSnackBar(
+              ctxt: context,
+              messeage: 'Disponible bientôt',
+            );
+          },
+        ), */
         const SizedBox(
           height: 10,
         ),

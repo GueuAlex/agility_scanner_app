@@ -48,9 +48,7 @@
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
 		<key>NSCameraUsageDescription</key>
-		<string>This app needs camera access to scan QR codes</string>
-		<key>NSPhotoLibraryUsageDescription</key>
-		<string>This app needs photos access to get QR code from photo library</string>
+		<string>L'application a besoin d'accéder à la caméra pour lire les codes QR des visiteurs et des employés d'Agility. Ceci est nécessaire pour enregistrer l'entrée et la sortie de chaque personne dans les locaux d'Agility.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>
