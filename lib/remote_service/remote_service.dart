@@ -30,7 +30,7 @@ class RemoteService {
     //print('Dans remote////////////////////////////// : ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       var json = response.body;
-      //print(response.body);
+      print(response.body);
       List<QrCodeModel> qrCodeModel = qrCodeModelListFromJson(json);
       print('qr code list : ${qrCodeModel.length}');
       return qrCodeModel;

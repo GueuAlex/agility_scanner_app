@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
 
 import '../../../config/app_text.dart';
@@ -36,11 +35,10 @@ class _VerifyByCodeSheetState extends State<VerifyByCodeSheet> {
   final TextEditingController codeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final String prefix =
-        'AG-${DateFormat('yy', 'fr_FR').format(DateTime.now())}-';
+    final String prefix = 'AG-';
     final Widget codeTextField = TextField(
       controller: codeController,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.text,
       style: const TextStyle(
         color: Colors.black,
         fontSize: 14,
