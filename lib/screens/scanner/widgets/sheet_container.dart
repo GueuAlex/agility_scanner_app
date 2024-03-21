@@ -809,7 +809,7 @@ class _SheetContainerState extends State<SheetContainer> {
     );
 
     ////////////////////////////////////////
-    /// 3. si la date vite est passée
+    /// 3. si la date visite est passée
     if (qrCodeModel.dateFin != null) {
       DateTime dateFin = DateTime(
         qrCodeModel.dateFin!.year,
