@@ -222,13 +222,38 @@ class _ScanSreenState extends State<ScanSreen> {
                                   height: 35,
                                   radius: 5,
                                   text: 'Utiliser un code de vérification',
-                                  onPress: () {
+                                  onPress: () async {
                                     setState(() {
                                       showLabel1 = true;
                                     });
 
-                                    Navigator.of(context)
-                                        .pushNamed(VerifyByCodeSheet.routeName);
+                                    Navigator.of(context).pushNamed(
+                                      VerifyByCodeSheet.routeName,
+                                    );
+                                    /* if (Platform.isIOS) {
+                                      //await Workmanager().cancelAll();
+                                      await Workmanager().registerOneOffTask(
+                                        "task-identifier",
+                                        "task-identifier", // Ignored on iOS
+                                        initialDelay: Duration(seconds: 10),
+                                        constraints: Constraints(
+                                          // connected or metered mark the task as requiring internet
+                                          networkType: NetworkType.connected,
+                                          // require external power
+                                          requiresCharging: true,
+                                        ),
+                                        // fully supported
+                                      );
+                                    } else {
+                                      await Workmanager().registerPeriodicTask(
+                                        "task-identifier",
+                                        "task-identifier",
+                                        initialDelay: Duration(seconds: 10),
+                                        constraints: Constraints(
+                                          networkType: NetworkType.connected,
+                                        ),
+                                      );
+                                    } */
                                   },
                                 ),
                               ),

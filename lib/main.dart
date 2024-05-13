@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:scanner/screens/add_delivering/add_deli_screen.dart';
 import 'package:scanner/screens/auth/pin_code_screen.dart';
 import 'package:scanner/screens/delivering/deliverig_screen.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'bloc/internet_bloc/internet_bloc.dart';
 import 'config/functions.dart';
@@ -21,10 +22,27 @@ import 'screens/search_by_date/deli_search_by_date_screen.dart';
 import 'screens/search_by_date/search_by_date_screen.dart';
 import 'screens/splash/splash_screen.dart';
 
+@pragma('vm:entry-point')
+void callbackDispatcher() {
+  Workmanager().executeTask((taskName, inputData) {
+    switch (taskName) {
+      case "task-identifier":
+        print(
+            '****************************************************************\n****************************************************************\n************************ first task done************************\n****************************************************************\n****************************************************************\n****************************************************************\n****************************************************************');
+        break;
+      default:
+    }
+    return Future.value(true);
+  });
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
+  await Workmanager().initialize(
+    callbackDispatcher,
+    isInDebugMode: true,
+  );
   Timer.periodic(Duration(minutes: 1), (timer) {
     Functions.getQrcodesFromApi();
     Functions.getScanHistoriesFromApi();
