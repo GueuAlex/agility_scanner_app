@@ -20,11 +20,13 @@ class SheetContainer extends StatefulWidget {
   /// a utiliser pour l'api
   /// on va utilise qrValue, pour une requet get dans notre api
   /// pour obtenir toutes les infos du rqcode qu'on vient de scanné
-  final String qrValue;
+  //final String qrValue;
+  final QrCodeModel visite;
   ////////:::::::::::::////////////////
   const SheetContainer({
     super.key,
-    required this.qrValue,
+    //required this.qrValue,
+    required this.visite,
   });
 
   @override
@@ -49,13 +51,13 @@ class _SheetContainerState extends State<SheetContainer> {
   ///
   String alertCarIDValue = '';
 
-  User? user;
-  QrCodeModel? _qrCodeModel;
+  /*  User? user;
+  QrCodeModel? _qrCodeModel; */
 
   @override
   void initState() {
     //getUser(id: int.parse(widget.qrValue));
-    getQrCode(qrCodeId: int.parse(widget.qrValue));
+    //getQrCode(qrCodeId: int.parse(widget.qrValue));
     /////////
     Future.delayed(const Duration(seconds: 4)).then((_) {
       setState(() {
@@ -68,7 +70,7 @@ class _SheetContainerState extends State<SheetContainer> {
   ////////////////////////////////////
   ///fonction qui nous permet de faire la requette get
   ///sur notre api
-  getQrCode({required int qrCodeId}) async {
+  /*  getQrCode({required int qrCodeId}) async {
     ////////////////////
     /// eventualité de faire appel a api/qrcodes/id
     /// si les données devient trop lourde a chargé
@@ -79,7 +81,7 @@ class _SheetContainerState extends State<SheetContainer> {
     _qrCodeModel = qrCodeModel;
     user = _qrCodeModel!.user;
     //print(_qrCodeModel);
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -151,27 +153,25 @@ class _SheetContainerState extends State<SheetContainer> {
           children: [
             const AllSheetHeader(),
             Expanded(
-              child: !isLoading
-                  ? SingleChildScrollView(
-                      child: user != null
-                          ? Column(
-                              children: [
-                                SheetHeader(
-                                  user: user!,
-                                  qrCodeModel: _qrCodeModel!,
-                                ),
-                                Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: getWidget(
-                                      qrCodeModel: _qrCodeModel!,
-                                      idTextField: idTextField,
-                                      cardIddTextField: cardIddTextField,
-                                    )),
-                              ],
-                            )
-                          : Functions.widget404(size: size, ctxt: context),
+                child: SingleChildScrollView(
+                    child: Column(
+              children: [
+                SheetHeader(
+                  user: widget.visite.user,
+                  qrCodeModel: widget.visite,
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: getWidget(
+                      qrCodeModel: widget.visite,
+                      idTextField: idTextField,
+                      cardIddTextField: cardIddTextField,
+                    )),
+              ],
+            )
+                    /* : Functions.widget404(size: size, ctxt: context), */
                     )
-                  : Center(
+                /* : Center(
                       child: Container(
                         height: 70,
                         width: double.infinity,
@@ -179,8 +179,8 @@ class _SheetContainerState extends State<SheetContainer> {
                           child: Image.asset('assets/images/loading.gif'),
                         ),
                       ),
-                    ),
-            )
+                    ), */
+                )
           ],
         ),
       ),
@@ -502,7 +502,7 @@ class _SheetContainerState extends State<SheetContainer> {
 
     /// //////////////////////////////////
     /// if update via APIs is done
-    ScanHistoryModel.scanHistories.add(scanHistoryModel);
+    //ScanHistoryModel.scanHistories.add(scanHistoryModel);
     Future.delayed(const Duration(seconds: 3)).then((value) {
       Navigator.pop(context);
       Navigator.pop(context);
@@ -530,7 +530,7 @@ class _SheetContainerState extends State<SheetContainer> {
     /// //////////////////////////////////
     /// if update via APIs is done
     qrCodeModel.isActive = false;
-    ScanHistoryModel.scanHistories.add(scanHistoryModel);
+    //ScanHistoryModel.scanHistories.add(scanHistoryModel);
     Navigator.pop(context);
     Functions.showSnackBar(
       ctxt: context,
@@ -649,7 +649,7 @@ class _SheetContainerState extends State<SheetContainer> {
                   user.numeroCni = iDController.text;
                   user.plaqueVehicule = cariDController.text;
 
-                  ScanHistoryModel.scanHistories.add(scanHistoryModel);
+                  // ScanHistoryModel.scanHistories.add(scanHistoryModel);
                   //////////////////////////////////fin test ////////////////
                   ///
                   Future.delayed(const Duration(seconds: 3)).then(

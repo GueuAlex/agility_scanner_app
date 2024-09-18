@@ -58,6 +58,26 @@ class RemoteService {
     return [];
   }
 
+  //post data
+  Future<http.Response> postData(
+      {required String endpoint,
+      required Map<String, dynamic> postData}) async {
+    final url = Uri.parse('$baseUri$endpoint');
+    print('$baseUri$endpoint');
+
+    final response = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode(postData),
+    );
+    print(response.body);
+
+    return response;
+  }
+
   //////////////////////////////// get single user by id //////////////////////
   ///
   /*  Future<MyUserModel?> getSingleUser({required int id}) async {

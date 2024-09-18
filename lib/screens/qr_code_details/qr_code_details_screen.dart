@@ -24,13 +24,6 @@ class QrCodeDetailsScreen extends StatelessWidget {
     final qrCodeModel =
         ModalRoute.of(context)!.settings.arguments as QrCodeModel;
     final User user = qrCodeModel.user;
-    final List<ScanHistoryModel> scanList = getThisQrCodeScanHistory(
-      qrCodeId: qrCodeModel.id,
-    );
-
-    List<OrderByDateAndHours<ScanHistoryModel>> data = getDataByDate(
-      scanList: scanList,
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -48,82 +41,101 @@ class QrCodeDetailsScreen extends StatelessWidget {
           'Detailles',
           color: Palette.whiteColor,
         ),
-        // elevation: 1,
       ),
       body: SafeArea(
-          child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            color: Palette.primaryColor,
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                DetailsHeader(
-                  user: user,
-                  qrCodeModel: qrCodeModel,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                DetailsHeader(
-                  isQrcodeInfos: true,
-                  user: user,
-                  qrCodeModel: qrCodeModel,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: InfosColumn(
-                label: 'Historique',
-                widget: AppText.medium('Historiques des scans')),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: data
-                    .map(
-                      (e) => GFAccordion(
-                        titleChild: AppText.medium(
-                          dateFormateur(dateTime: e.date),
-                        ),
-                        contentChild: GridView.builder(
-                          shrinkWrap: true,
-
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, // Nombre d'éléments par ligne
-                            childAspectRatio: 3.6,
-                          ),
-                          itemCount: e.data
-                              .length, // Nombre total d'éléments dans la grille
-                          itemBuilder: (context, index) {
-                            return Details(scanHistoryModel: e.data[index]);
-                          },
-                        ),
-                      ),
-                    )
-                    .toList(),
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              color: Palette.primaryColor,
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  DetailsHeader(
+                    user: user,
+                    qrCodeModel: qrCodeModel,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  DetailsHeader(
+                    isQrcodeInfos: true,
+                    user: user,
+                    qrCodeModel: qrCodeModel,
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
-      )),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: InfosColumn(
+                label: 'Historique',
+                widget: AppText.medium('Historiques des scans'),
+              ),
+            ),
+            Expanded(
+              child: FutureBuilder<List<ScanHistoryModel>>(
+                future: getThisQrCodeScanHistory(
+                    qrCodeId: qrCodeModel.id), // Appel Future
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ); // Affiche un loader pendant le chargement
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Une erreur est survenue'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text('Aucun historique trouvé'));
+                  }
+
+                  // Récupère les données une fois chargées
+                  List<ScanHistoryModel> scanList = snapshot.data!;
+                  List<OrderByDateAndHours<ScanHistoryModel>> data =
+                      getDataByDate(scanList: scanList);
+
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: data
+                          .map(
+                            (e) => GFAccordion(
+                              titleChild: AppText.medium(
+                                dateFormateur(dateTime: e.date),
+                              ),
+                              contentChild: GridView.builder(
+                                shrinkWrap: true,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 3.6,
+                                ),
+                                itemCount: e.data.length,
+                                itemBuilder: (context, index) {
+                                  return Details(
+                                      scanHistoryModel: e.data[index]);
+                                },
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   // retourne l'historique de scan d'un qr code
-  List<ScanHistoryModel> getThisQrCodeScanHistory({required int qrCodeId}) {
-    List<ScanHistoryModel> scanList = [];
-    scanList.clear();
-    ScanHistoryModel.scanHistories.forEach((element) {
-      if (element.qrCodeId == qrCodeId) {
-        scanList.add(element);
-      }
-    });
-    return scanList;
+// Retourne l'historique de scan d'un QR code
+  Future<List<ScanHistoryModel>> getThisQrCodeScanHistory(
+      {required int qrCodeId}) async {
+    List<ScanHistoryModel> scanHistories = await ScanHistoryModel.scanHistories;
+    return scanHistories
+        .where((element) => element.qrCodeId == qrCodeId)
+        .toList();
   }
 
 ////////////////

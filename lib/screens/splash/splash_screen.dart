@@ -8,7 +8,7 @@ import 'package:scanner/screens/auth/pin_code_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/app_text.dart';
-import '../../config/functions.dart';
+/* import '../../config/functions.dart'; */
 import '../../widgets/copy_rigtht.dart';
 import '../scanner/scan_screen.dart';
 
@@ -77,12 +77,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-    Functions.getQrcodesFromApi();
+    /*  Functions.getQrcodesFromApi();
     Functions.getScanHistoriesFromApi();
     Functions.allEntrepise();
-    Functions.allLivrason();
+    Functions.allLivrason(); */
 
-    Future.delayed(const Duration(seconds: 10)).then((_) async {
+    Future.delayed(const Duration(seconds: 3)).then((_) async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       bool? isFirstTime = await prefs.getBool('asAuth');
       if (isFirstTime != null && isFirstTime) {

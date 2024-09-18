@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:scanner/screens/add_delivering/add_deli_screen.dart';
@@ -11,7 +12,7 @@ import 'package:scanner/screens/delivering/deliverig_screen.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'bloc/internet_bloc/internet_bloc.dart';
-import 'config/functions.dart';
+import 'bloc/visite_history_bloc/qr_code_bloc.dart';
 import 'dependency_injection.dart';
 import 'screens/auth/login/login.dart';
 import 'screens/home/home.dart';
@@ -43,16 +44,27 @@ Future<void> main() async {
     callbackDispatcher,
     isInDebugMode: true,
   );
-  Timer.periodic(Duration(minutes: 1), (timer) {
+  /*  Timer.periodic(Duration(minutes: 1), (timer) {
     Functions.getQrcodesFromApi();
     Functions.getScanHistoriesFromApi();
     Functions.allEntrepise();
     Functions.allLivrason();
-  });
+  }); */
 
   runApp(
-    BlocProvider(
+    /* BlocProvider(
       create: (context) => InternetBloc(),
+      child: const MyApp(),
+    ), */
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => InternetBloc(),
+        ),
+        BlocProvider(
+          create: (context) => QrCodeBloc(qrCodeRepository: QrCodeRepository()),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
@@ -79,6 +91,7 @@ class MyApp extends StatelessWidget {
       locale: const Locale('eu', 'FR'),
       title: 'Flutter Demo',
       theme: ThemeData(
+        useMaterial3: false,
         scaffoldBackgroundColor: Colors.white,
         primarySwatch: Colors.amber,
         fontFamily: "Gordita",
@@ -111,6 +124,7 @@ class MyApp extends StatelessWidget {
             const DeliSearchByDateScreen(),
         PincodeScreen.routeName: (ctxt) => const PincodeScreen(),
       },
+      builder: EasyLoading.init(),
     );
   }
 }

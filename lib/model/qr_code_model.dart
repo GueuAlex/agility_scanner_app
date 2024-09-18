@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import '../remote_service/remote_service.dart';
 import 'user.dart';
 
 QrCodeModel qrCodeModelFromJson(String str) =>
@@ -69,6 +70,11 @@ class QrCodeModel {
         "is_already_scanned": isAlreadyScanned,
         "user": user.toJson(),
       };
+
+  static Future<List<QrCodeModel>> get visites async {
+    final List<QrCodeModel> visiteData = await RemoteService().getQrcodes();
+    return visiteData;
+  }
 
   static List<QrCodeModel> qrCodeList = [
     QrCodeModel(

@@ -141,18 +141,38 @@ class Functions {
 
 //retourn la liste des historique de scan
 // en se basant sur selectedDate
-  static List<ScanHistoryModel> getSelectedDateScanHistory({
+  static Future<List<ScanHistoryModel>> getSelectedDateScanHistory({
     required DateTime selectedDate,
-  }) {
+  }) async {
     List<ScanHistoryModel> scanList = [];
+    List<ScanHistoryModel> allScanHistories =
+        await ScanHistoryModel.scanHistories;
     scanList.clear();
-    for (ScanHistoryModel element in ScanHistoryModel.scanHistories) {
+    for (ScanHistoryModel element in allScanHistories) {
       // print(element.scandDate);
       if (element.scandDate == selectedDate) {
         scanList.add(element);
       }
     }
     return scanList;
+  }
+
+  // Retourne une liste des visites où le QR code est déjà scanné en se basant
+// sur la liste des historiques de scan
+  static Future<List<QrCodeModel>> getScannedVisites({
+    required List<ScanHistoryModel> scanList,
+  }) async {
+    Set<QrCodeModel> qrs = {};
+    List<QrCodeModel> allVisites = await QrCodeModel.visites;
+
+    for (QrCodeModel visite in allVisites) {
+      for (ScanHistoryModel element in scanList) {
+        if (visite.id == element.qrCodeId) {
+          qrs.add(visite);
+        }
+      }
+    }
+    return qrs.toList();
   }
 
   static List<Livraison> getSelectedDateLivraisons({
@@ -205,9 +225,9 @@ class Functions {
   }
 
 // retourne l'historique des qr code depuis l'api
-  static getScanHistoriesFromApi() async {
+  /*  static getScanHistoriesFromApi() async {
     ScanHistoryModel.scanHistories = await RemoteService().getScanHistories();
-  }
+  } */
 
   //retourne la liste de toutes les entreprise
   static allEntrepise() async {

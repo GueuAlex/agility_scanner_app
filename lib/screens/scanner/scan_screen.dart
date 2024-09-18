@@ -1,3 +1,5 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:scanner/model/qr_code_model.dart';
 import 'package:vibration/vibration.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
@@ -8,7 +10,9 @@ import '../../config/app_text.dart';
 import '../../config/functions.dart';
 import '../../config/overlay.dart';
 import '../../config/palette.dart';
+import '../../remote_service/remote_service.dart';
 import '../../widgets/action_button.dart';
+import '../../widgets/all_sheet_header.dart';
 import '../../widgets/copy_rigtht.dart';
 import '../../widgets/custom_button.dart';
 import '../side_bar/custom_side_bar.dart';
@@ -94,13 +98,15 @@ class _ScanSreenState extends State<ScanSreen> {
                         // onDetect: fonction lancée lorsqu'un rq code est
                         // detecté par la cam
                         ////////////////////
-                        onDetect: (barcodes, args) {
+                        onDetect: (barcodes, args) async {
                           if (!isScanCompleted) {
                             ////////////////
                             /// code =  données que le qrcode continet
                             String code = barcodes.rawValue ?? '...';
-                            print('qr code value is : $code');
+                            // print('qr code value is : $code');
                             //////////////
+                            final codePattern = RegExp(r'^AG-\d{2}-\d+$');
+
                             /// booleen permettant de connaitre l'etat
                             /// du process de scanning
                             isScanCompleted = true;
@@ -108,26 +114,62 @@ class _ScanSreenState extends State<ScanSreen> {
                             /// on attend un int
                             /// donc on int.tryParse code pour etre sur de
                             /// son type
-                            int? id = int.tryParse(code);
+                            // int? id = int.tryParse(code);
 
                             ///
                             /////////////////////////////
                             ///id represente l'id du qrcode dans notre DB
                             /// si id n'est pas null, on envoie id
                             /// a SheetContainer .....
-                            if (id != null) {
-                              player.play('images/soung.mp3');
-                              Functions.showBottomSheet(
-                                ctxt: context,
-                                widget: SheetContainer(qrValue: code),
-                              ).whenComplete(() {
-                                Future.delayed(const Duration(seconds: 5))
-                                    .then((_) {
-                                  setState(() {
-                                    isScanCompleted = false;
+                            if (codePattern.hasMatch(code)) {
+                              EasyLoading.show();
+                              // fetch data
+                              var postData = {
+                                "code_visite": code,
+                              };
+                              await RemoteService()
+                                  .postData(
+                                endpoint: 'qrcodes/verifications',
+                                postData: postData,
+                              )
+                                  .then((response) async {
+                                //EasyLoading.dismiss();
+                                if (response.statusCode == 200 ||
+                                    response.statusCode == 201) {
+                                  //
+                                  QrCodeModel visite = qrCodeModelFromJson(
+                                    response.body,
+                                  );
+
+                                  // print(visite);
+
+                                  player.play('images/soung.mp3');
+
+                                  Functions.showBottomSheet(
+                                    ctxt: context,
+                                    widget: SheetContainer(
+                                      visite: visite,
+                                      //qrValue: "1",
+                                    ),
+                                  ).whenComplete(() {
+                                    Future.delayed(const Duration(seconds: 3))
+                                        .then((_) {
+                                      setState(() {
+                                        isScanCompleted = false;
+                                      });
+                                    });
                                   });
-                                });
+                                  ;
+                                  EasyLoading.dismiss();
+                                } else {
+                                  //print('object');
+                                  EasyLoading.dismiss();
+                                  _error();
+                                }
                               });
+                              //////////////
+                              ///
+                              EasyLoading.dismiss();
                             } else {
                               ///////////////////////
                               ///sinon on fait vibrer le device
@@ -221,6 +263,9 @@ class _ScanSreenState extends State<ScanSreen> {
                                   width: double.infinity,
                                   height: 35,
                                   radius: 5,
+                                  isSetting: true,
+                                  fontsize:
+                                      MediaQuery.of(context).size.width * 0.03,
                                   text: 'Utiliser un code de vérification',
                                   onPress: () async {
                                     setState(() {
@@ -273,6 +318,38 @@ class _ScanSreenState extends State<ScanSreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  //
+  void _error() {
+    ///////////////////////
+    ///sinon on fait vibrer le device
+    ///et on afficher un message d'erreur
+    ///
+    final size = MediaQuery.of(context).size;
+    Vibration.vibrate(duration: 200);
+    Functions.showBottomSheet(
+      ctxt: context,
+      widget: Container(
+        height: MediaQuery.of(context).size.height / 2,
+        decoration: BoxDecoration(
+          color: Palette.whiteColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
+        ),
+        child: Column(
+          children: [
+            AllSheetHeader(),
+            Functions.widget404(
+              size: size,
+              ctxt: context,
+            ),
+          ],
         ),
       ),
     );
