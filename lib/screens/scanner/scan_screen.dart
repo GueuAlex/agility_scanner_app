@@ -50,8 +50,7 @@ class _ScanSreenState extends State<ScanSreen> {
 
   ////////////////
   ///
-  AudioCache player = AudioCache();
-
+final player = AudioPlayer();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,8 +141,9 @@ class _ScanSreenState extends State<ScanSreen> {
                                   );
 
                                   // print(visite);
-
-                                  player.play('images/soung.mp3');
+                                  
+                                  await player.play(AssetSource('images/soung.mp3'));
+                                 // player.play('images/soung.mp3');
 
                                   Functions.showBottomSheet(
                                     ctxt: context,

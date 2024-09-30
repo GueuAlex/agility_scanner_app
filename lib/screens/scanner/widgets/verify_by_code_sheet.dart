@@ -30,9 +30,10 @@ class VerifyByCodeSheet extends StatefulWidget {
 class _VerifyByCodeSheetState extends State<VerifyByCodeSheet> {
   ////////////////
   ///
-  AudioCache player = AudioCache();
+  //AudioCache player = AudioCache();
   ///////////////:
-  ///
+final player = AudioPlayer();
+
   bool showLabel1 = true;
   final TextEditingController codeController = TextEditingController();
   @override
@@ -149,7 +150,7 @@ class _VerifyByCodeSheetState extends State<VerifyByCodeSheet> {
 
                                 // print(visite);
 
-                                player.play('images/soung.mp3');
+                                 await player.play(AssetSource('images/soung.mp3'));
                                 Functions.showBottomSheet(
                                   ctxt: context,
                                   widget: SheetContainer(

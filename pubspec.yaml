@@ -41,7 +41,7 @@ dependencies:
     sdk: flutter
   intl: ^0.19.0
   double_back_to_close_app: ^2.1.0
-  audioplayers: ^0.20.1
+  audioplayers: ^6.1.0
   vibration: ^1.7.7
   http: ^0.13.6
   fluttertoast: ^8.2.8
@@ -97,7 +97,6 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
-    - assets/soung/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
