@@ -38,6 +38,15 @@ class RemoteService {
     return [];
   }
 
+  ////////////////////////////////////////////////////////////
+  /// get all qr code in our BD
+  ///////
+  Future<http.Response> getVisite({required String visiteId}) async {
+    var uri = Uri.parse(baseUri + 'qrcodes/$visiteId');
+    var response = await client.get(uri);
+    return response;
+  }
+
   //////////////////////////////
   ///
   ////////////////////////////////////////////////////////////

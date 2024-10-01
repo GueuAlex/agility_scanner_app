@@ -50,7 +50,7 @@ class _ScanSreenState extends State<ScanSreen> {
 
   ////////////////
   ///
-final player = AudioPlayer();
+  final player = AudioPlayer();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +104,8 @@ final player = AudioPlayer();
                             String code = barcodes.rawValue ?? '...';
                             // print('qr code value is : $code');
                             //////////////
-                            final codePattern = RegExp(r'^AG-\d{2}-\d+$');
+                            //final codePattern = RegExp(r'^AG-\d{2}-\d+$');
+                            final int? id = int.tryParse(code);
 
                             /// booleen permettant de connaitre l'etat
                             /// du process de scanning
@@ -120,16 +121,12 @@ final player = AudioPlayer();
                             ///id represente l'id du qrcode dans notre DB
                             /// si id n'est pas null, on envoie id
                             /// a SheetContainer .....
-                            if (codePattern.hasMatch(code)) {
+                            if (id != null) {
                               EasyLoading.show();
-                              // fetch data
-                              var postData = {
-                                "code_visite": code,
-                              };
+
                               await RemoteService()
-                                  .postData(
-                                endpoint: 'qrcodes/verifications',
-                                postData: postData,
+                                  .getVisite(
+                                visiteId: id.toString(),
                               )
                                   .then((response) async {
                                 //EasyLoading.dismiss();
@@ -141,9 +138,10 @@ final player = AudioPlayer();
                                   );
 
                                   // print(visite);
-                                  
-                                  await player.play(AssetSource('images/soung.mp3'));
-                                 // player.play('images/soung.mp3');
+
+                                  await player
+                                      .play(AssetSource('images/soung.mp3'));
+                                  // player.play('images/soung.mp3');
 
                                   Functions.showBottomSheet(
                                     ctxt: context,
